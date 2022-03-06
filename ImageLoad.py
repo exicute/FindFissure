@@ -17,10 +17,10 @@ class processedImage():
         # add together and take square root
         sobel_magnitude = cv2.sqrt(sobelx2 + sobely2)
         # normalize to range 0 to 255 and clip negatives
-        self.sobel_magnitude = exposure.rescale_intensity(sobel_magnitude, in_range='image', out_range=(0,255)).clip(70,255).astype(np.uint8)
-        ret, self.thresh = cv2.threshold(self.sobel_magnitude, 120, 255, cv2.THRESH_BINARY)
+        self.sobel_magnitude = exposure.rescale_intensity(sobel_magnitude, in_range='image', out_range=(0,255)).clip(80,255).astype(np.uint8)
+        ret, self.thresh = cv2.threshold(self.sobel_magnitude, 140, 255, cv2.THRESH_BINARY)
 
-        kernel = np.ones((7,7), np.uint8)
+        kernel = np.ones((5,5), np.uint8)
         self.opening = cv2.morphologyEx(self.thresh, cv2.MORPH_CLOSE, kernel)
 
         self.contours, self.hierarchy = cv2.findContours(self.opening, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE) 

@@ -41,7 +41,7 @@ class contourClass():
 
 
 
-allLines = []
+findedLines = []
 connectingLines = []
 
 
@@ -51,17 +51,17 @@ def delete_defects(item, image):
         if (actContour.areaLength<80) or ((actContour.arcL)==0 or ((actContour.areaLength)/pow(actContour.arcL, 2))>0.02):
             continue
         else:
-            allLines.append(actContour)
+            findedLines.append(actContour)
             cv2.drawContours(image, item.contours[i], -1, (0, 255, 0), 2)
 
 
 def combine_boxes(lines, const):
-    for x in lines:
-        for y in lines:
-            A1 = x.ptA
-            A2 = y.ptA
-            B1 = x.ptB
-            B2 = y.ptB
+    for x in range(0, len(lines)-1):
+        for y in range(x+1, len(lines)):
+            A1 = lines[x].ptA
+            A2 = lines[y].ptA
+            B1 = lines[x].ptB
+            B2 = lines[y].ptB
             alength = np.sqrt((A1[0]-A2[0])**2+(A1[1]-A2[1])**2)
             blength = np.sqrt((B1[0]-B2[0])**2+(B1[1]-B2[1])**2)
             ablength = np.sqrt((B1[0]-A2[0])**2+(B1[1]-A2[1])**2)
@@ -78,19 +78,39 @@ def combine_boxes(lines, const):
 
 
 
+def simmilar_var(lines1, lines2, img):
+    allLines = [[x.ptA, x.ptB] for x in lines1]
+    allLines = allLines+lines2
+    allLines = sum(allLines, [])
+    
+    somepts = []
+    endpts = []
+    for x in range(0, len(allLines)-1):
+        for y in range(x+1, len(allLines)):
+            if allLines[x]==allLines[y]:
+                somepts.append(allLines[x])
+
+    for x in allLines:
+        if x not in somepts:
+            endpts.append(x)
+
+    for x in endpts:
+        cv2.circle(img, x, 8, (255, 0, 0), 2)
+    
+    numlines = len(endpts)/2
+
+
 if __name__ == "__main__":
     img = cv2.imread('paint3.jpeg')
     my_image = processedImage(img)
 
     delete_defects(my_image, img)
-    combine_boxes(allLines, 30)
-    print(len(connectingLines))
-    for l in allLines:
+    combine_boxes(findedLines, 50)
+    simmilar_var(findedLines, connectingLines, img)
+    for l in findedLines:
         cv2.line(img, l.ptA, l.ptB, (0, 0, 255), 2)
     for l in connectingLines:
         cv2.line(img, l[0], l[1], (0, 0, 255), 2)
-
-    find_lines(img)
 
     cv2.imshow('window', img)
     cv2.waitKey(0)
