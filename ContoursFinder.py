@@ -77,7 +77,6 @@ def combine_boxes(lines, const):
                 connectingLines.append([A1, B2])
 
 
-
 def simmilar_var(lines1, lines2, img):
     allLines = [[x.ptA, x.ptB] for x in lines1]
     allLines = allLines+lines2
@@ -100,8 +99,10 @@ def simmilar_var(lines1, lines2, img):
     numlines = len(endpts)/2
 
 
+
+
 if __name__ == "__main__":
-    img = cv2.imread('paint3.jpeg')
+    img = cv2.imread('paint0.jpeg')
     my_image = processedImage(img)
 
     delete_defects(my_image, img)
@@ -112,5 +113,5 @@ if __name__ == "__main__":
     for l in connectingLines:
         cv2.line(img, l[0], l[1], (0, 0, 255), 2)
 
-    cv2.imshow('window', img)
+    cv2.imshow('window', my_image.closing)
     cv2.waitKey(0)

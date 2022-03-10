@@ -21,9 +21,10 @@ class processedImage():
         ret, self.thresh = cv2.threshold(self.sobel_magnitude, 140, 255, cv2.THRESH_BINARY)
 
         kernel = np.ones((5,5), np.uint8)
-        self.opening = cv2.morphologyEx(self.thresh, cv2.MORPH_CLOSE, kernel)
+        self.dilation = cv2.dilate(self.thresh, kernel, iterations = 1)
+        self.closing = cv2.morphologyEx(self.dilation, cv2.MORPH_CLOSE, kernel)
 
-        self.contours, self.hierarchy = cv2.findContours(self.opening, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE) 
+        self.contours, self.hierarchy = cv2.findContours(self.closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE) 
 
     def show_image(self):
         cv2.imshow('window', self.blur)
