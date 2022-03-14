@@ -18,7 +18,7 @@ class processedImage():
         sobel_magnitude = cv2.sqrt(sobelx2 + sobely2)
         # normalize to range 0 to 255 and clip negatives
         self.sobel_magnitude = exposure.rescale_intensity(sobel_magnitude, in_range='image', out_range=(0,255)).clip(80,255).astype(np.uint8)
-        ret, self.thresh = cv2.threshold(self.sobel_magnitude, 140, 255, cv2.THRESH_BINARY)
+        ret, self.thresh = cv2.threshold(self.sobel_magnitude, 138, 255, cv2.THRESH_BINARY)
 
         kernel = np.ones((5,5), np.uint8)
         self.dilation = cv2.dilate(self.thresh, kernel, iterations = 1)
