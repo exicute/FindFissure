@@ -151,7 +151,7 @@ def length_finder(pts, img):
 
 
 if __name__ == "__main__":
-    img = cv2.imread('paint4.jpeg')
+    img = cv2.imread('paint3.jpeg')
     my_image = processedImage(img)
 
     delete_defects(my_image, img)
